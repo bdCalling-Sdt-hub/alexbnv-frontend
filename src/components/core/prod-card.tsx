@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -26,9 +27,11 @@ import {
 export default function ProductCard({
   fromProfile,
   activable,
+  control,
 }: {
   fromProfile?: boolean;
   activable?: boolean;
+  control?: boolean;
 }) {
   const [active, setActive] = useState(true);
 
@@ -37,8 +40,8 @@ export default function ProductCard({
   }
 
   return (
-    <Link href="/seller/product">
-      <Card className="!pt-0 overflow-hidden">
+    <Card className="!pt-0 overflow-hidden">
+      <Link href="/seller/product">
         <CardHeader className="!p-0 relative !gap-0">
           <div className="h-full w-full">
             <Image
@@ -72,83 +75,91 @@ export default function ProductCard({
               </div>
             ))}
         </CardHeader>
-        <CardContent className="!space-y-2">
-          <div className=" flex flex-row justify-start items-center gap-2">
-            <UtensilsCrossed className="text-destructive size-5" />{" "}
-            <span className="text-ellipsis line-clamp-1 text-sm">
-              Hyderabadi Biryani, Lucknowi Biryani
-            </span>
+      </Link>
+      <CardContent className="!space-y-2">
+        <div className=" flex flex-row justify-start items-center gap-2">
+          <UtensilsCrossed className="text-destructive size-5" />{" "}
+          <span className="text-ellipsis line-clamp-1 text-sm">
+            Hyderabadi Biryani, Lucknowi Biryani
+          </span>
+        </div>
+        <div className=" flex flex-row justify-start items-center gap-2">
+          <MapPin className="text-destructive size-5" />{" "}
+          <span className="text-ellipsis line-clamp-1 text-sm">
+            Olympiapark, Munich, EMEA 90763
+          </span>
+        </div>
+        <div className=" flex flex-row justify-start items-center gap-2">
+          <BikeIcon className="text-destructive size-5" />{" "}
+          <span className="text-ellipsis line-clamp-1 text-sm font-semibold italic text-green-600 flex flex-row justify-start items-center gap-1">
+            Free delivery <div className="size-1.5 bg-green-600 rounded-full" />
+            Min. order $60/-
+          </span>
+        </div>
+        <Link
+          href="/seller"
+          className="w-full flex flex-row justify-between items-center group !mt-6"
+        >
+          <div className="flex flex-row justify-start items-center gap-2">
+            <Avatar className="size-10">
+              <AvatarImage src="https://avatar.iran.liara.run/public" />
+              <AvatarFallback>UI</AvatarFallback>
+            </Avatar>
+            <div className="h-full">
+              <h4 className="font-bold group-hover:text-green-600 transition-colors">
+                Food Mania
+              </h4>
+              <p className="text-xs text-muted-foreground">Sasha</p>
+            </div>
           </div>
-          <div className=" flex flex-row justify-start items-center gap-2">
-            <MapPin className="text-destructive size-5" />{" "}
-            <span className="text-ellipsis line-clamp-1 text-sm">
-              Olympiapark, Munich, EMEA 90763
-            </span>
+          <div className="flex gap-1 text-sm items-center">
+            4.8
+            <StarIcon className="size-4 fill-amber-400 text-amber-400" />
           </div>
-          <div className=" flex flex-row justify-start items-center gap-2">
-            <BikeIcon className="text-destructive size-5" />{" "}
-            <span className="text-ellipsis line-clamp-1 text-sm font-semibold italic text-green-600 flex flex-row justify-start items-center gap-1">
-              Free delivery{" "}
-              <div className="size-1.5 bg-green-600 rounded-full" />
-              Min. order $60/-
-            </span>
-          </div>
-        </CardContent>
-        {!fromProfile ? (
-          <CardFooter className="">
-            <Link
-              href="/seller"
-              className="w-full flex flex-row justify-between items-center group"
-            >
-              <div className="flex flex-row justify-start items-center gap-2">
-                <Avatar className="size-10">
-                  <AvatarImage src="https://avatar.iran.liara.run/public" />
-                  <AvatarFallback>UI</AvatarFallback>
-                </Avatar>
-                <div className="h-full">
-                  <h4 className="font-bold group-hover:text-green-600 transition-colors">
-                    Food Mania
-                  </h4>
-                  <p className="text-xs text-muted-foreground">Sasha</p>
-                </div>
-              </div>
-              <div className="flex gap-1 text-sm items-center">
-                4.8
-                <StarIcon className="size-4 fill-amber-400 text-amber-400" />
-              </div>
-            </Link>
-          </CardFooter>
-        ) : (
-          ""
-        )}
-        {activable && (
-          <div className="flex flex-row justify-center items-center">
-            <Dialog>
-              <DialogTrigger>
-                <Button>Request to Activate</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Send Activation Request?</DialogTitle>
-                  <DialogDescription>
-                    You&apos;re about to send a request to the seller to
-                    **activate this food item**. Once sent, the seller will be
-                    notified.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button onClick={handleActive}>Confirm</Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button variant="destructive">Cancel</Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-        )}
-      </Card>
-    </Link>
+        </Link>
+      </CardContent>
+      {!fromProfile ? (
+        <CardFooter className="">
+          {control && (
+            <CardAction className="grid grid-cols-3 gap-6 w-full">
+              <Button variant="outline" asChild>
+                <Link href="/seller/dashboard/food-items/add">Edit</Link>
+              </Button>
+              <Button variant="destructive">Delete</Button>
+              <Button>Active</Button>
+            </CardAction>
+          )}
+        </CardFooter>
+      ) : (
+        ""
+      )}
+      {activable && (
+        <div className="flex flex-row justify-center items-center">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Request to Activate</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Send Activation Request?</DialogTitle>
+                <DialogDescription>
+                  You&apos;re about to send a request to the seller to
+                  **activate this food item**. Once sent, the seller will be
+                  notified.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button onClick={handleActive}>Confirm</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button variant="destructive">Cancel</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
+    </Card>
   );
 }
